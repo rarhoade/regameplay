@@ -8,6 +8,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Inventory/Item.h"
+#include "Inventory/InventoryComponent.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AREGameplayCharacter
@@ -43,6 +45,11 @@ AREGameplayCharacter::AREGameplayCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
+	Health = 100.f;
+
+	Inventory = CreateDefaultSubobject<UInventoryComponent>("Inventory");
+	Inventory->Capacity = 20;
+	
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 }
@@ -138,3 +145,13 @@ void AREGameplayCharacter::MoveRight(float Value)
 		AddMovementInput(Direction, Value);
 	}
 }
+
+void AREGameplayCharacter::UseItem(class UItem* Item)
+{
+	if (Item)
+	{
+		Item->Use(this);
+		Item->OnUse(this);
+	}
+}
+
