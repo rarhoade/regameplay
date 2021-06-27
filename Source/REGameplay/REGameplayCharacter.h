@@ -18,6 +18,10 @@ class AREGameplayCharacter : public ACharacter
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Items, meta = (AllowPrivateAccess = "true"))
+	class UInventoryComponent* Inventory;
+
 public:
 	AREGameplayCharacter();
 
@@ -29,8 +33,17 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
 
-protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Health")
+	float Health;
 
+	UFUNCTION(BlueprintCallable, Category="Items")
+	void UseItem(class UItem* Item);
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Character Movement: Walking")
+	float sprintSpeed;
+	
+protected:
+	
 	/** Resets HMD orientation in VR. */
 	void OnResetVR();
 
@@ -59,6 +72,13 @@ protected:
 	void TouchStopped(ETouchIndex::Type FingerIndex, FVector Location);
 
 protected:
+
+	/*Moves quicker when sprint input begins*/
+	void Sprint();
+
+	/*Goes back to walkspeed when input ends*/
+	void StopSprint();
+	
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	// End of APawn interface
