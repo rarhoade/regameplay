@@ -29,8 +29,11 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Character Movement: Walking")
+	float sprintSpeed;
+	
 protected:
-
+	
 	/** Resets HMD orientation in VR. */
 	void OnResetVR();
 
@@ -59,6 +62,13 @@ protected:
 	void TouchStopped(ETouchIndex::Type FingerIndex, FVector Location);
 
 protected:
+
+	/*Moves quicker when sprint input begins*/
+	void Sprint();
+
+	/*Goes back to walkspeed when input ends*/
+	void StopSprint();
+	
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	// End of APawn interface
