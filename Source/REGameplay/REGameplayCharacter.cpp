@@ -45,6 +45,8 @@ AREGameplayCharacter::AREGameplayCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
+
+	sprintSpeed = 1.5f;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -74,6 +76,11 @@ void AREGameplayCharacter::SetupPlayerInputComponent(class UInputComponent* Play
 
 	// VR headset functionality
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &AREGameplayCharacter::OnResetVR);
+
+
+	//Sprinting related inputs
+	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &AREGameplayCharacter::Sprint);
+	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &AREGameplayCharacter::StopSprint);
 }
 
 
@@ -137,4 +144,16 @@ void AREGameplayCharacter::MoveRight(float Value)
 		// add movement in that direction
 		AddMovementInput(Direction, Value);
 	}
+}
+
+
+void AREGameplayCharacter::Sprint()
+{
+	GetCharacterMovement()->MaxWalkSpeed *=sprintSpeed;
+}
+
+
+void AREGameplayCharacter::StopSprint()
+{
+	GetCharacterMovement()->MaxWalkSpeed /= sprintSpeed;
 }
