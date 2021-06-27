@@ -8,6 +8,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Inventory/Item.h"
+#include "Inventory/InventoryComponent.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AREGameplayCharacter
@@ -45,6 +47,9 @@ AREGameplayCharacter::AREGameplayCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
+
+	Health = 100.f;
+	Inventory = CreateDefaultSubobject<UInventoryComponent>("Inventory");
 
 	sprintSpeed = 1.5f;
 }
@@ -152,4 +157,13 @@ void AREGameplayCharacter::Sprint()
 void AREGameplayCharacter::StopSprint()
 {
 	GetCharacterMovement()->MaxWalkSpeed /= sprintSpeed;
+}
+
+void AREGameplayCharacter::UseItem(class UItem* Item)
+{
+	if (Item)
+	{
+		Item->Use(this);
+		Item->OnUse(this);
+	}
 }

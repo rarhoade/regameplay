@@ -18,6 +18,10 @@ class AREGameplayCharacter : public ACharacter
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Items, meta = (AllowPrivateAccess = "true"))
+	class UInventoryComponent* Inventory;
+
 public:
 	AREGameplayCharacter();
 
@@ -28,6 +32,12 @@ public:
 	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Health")
+	float Health;
+
+	UFUNCTION(BlueprintCallable, Category="Items")
+	void UseItem(class UItem* Item);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Character Movement: Walking")
 	float sprintSpeed;
